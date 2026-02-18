@@ -1,0 +1,7 @@
+shell: cmd
+
+procs:
+  next:
+    cmd: ["pnpm.cmd", "run", "dev"]
+  inngest:
+    cmd: ["pnpm.cmd", "dlx", "inngest-cli", "dev"]
