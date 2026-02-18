@@ -1,13 +1,15 @@
+import { requireAuth } from "@/lib/auth-utils";
 import { caller } from "@/trpc/server";
 
 const Page = async () => {
-  const users = await caller.getUsers();
+  await requireAuth();
+
+  const data = await caller.getUsers();
 
   return (
-    <div>
-      {users.map((user) => (
-        <div key={user.id}>{user.name}</div>
-      ))}
+    <div className="min-h-screen min-w-screen flex items-center justify-center flex-col gap-y-6">
+      protected server component
+      <div>{JSON.stringify(data)}</div>
     </div>
   );
 };
