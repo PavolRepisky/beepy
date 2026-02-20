@@ -14,6 +14,9 @@ export const execute = inngest.createFunction(
   async ({ step }) => {
     await step.sleep("pretend", "5s");
 
+    console.warn("Something is missing");
+    console.error("This is an errror I want to track");
+
     const { steps: geminiSteps } = await step.ai.wrap(
       "gemini-generate-text",
       generateText,
@@ -21,6 +24,11 @@ export const execute = inngest.createFunction(
         model: google("gemini-2.5-flash"),
         system: "You are a helpful assistant.",
         prompt: "What is 2 + 2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       },
     );
 
@@ -31,6 +39,11 @@ export const execute = inngest.createFunction(
         model: openai("gpt-4"),
         system: "You are a helpful assistant.",
         prompt: "What is 2 + 2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       },
     );
 
@@ -41,6 +54,11 @@ export const execute = inngest.createFunction(
         model: anthropic("claude-3-5-sonnet-20240620"),
         system: "You are a helpful assistant.",
         prompt: "What is 2 + 2?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       },
     );
 
