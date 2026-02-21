@@ -1,7 +1,10 @@
-import { TRPCError } from "@trpc/server";
 import { inngest } from "@/inngest/client";
 import prisma from "@/lib/db";
-import { createTRPCRouter, protectedProcedure } from "../init";
+import {
+  createTRPCRouter,
+  premiumProcedure,
+  protectedProcedure,
+} from "../init";
 
 export const appRouter = createTRPCRouter({
   getWorkflows: protectedProcedure.query(() => {
@@ -17,7 +20,7 @@ export const appRouter = createTRPCRouter({
 
     return { success: true, message: "Job queued" };
   }),
-  testAi: protectedProcedure.mutation(async () => {
+  testAi: premiumProcedure.mutation(async () => {
     await inngest.send({
       name: "execute/ai",
     });
