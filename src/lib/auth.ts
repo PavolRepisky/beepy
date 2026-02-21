@@ -21,7 +21,7 @@ export const auth = betterAuth({
           products: [
             {
               productId: "ceae7f2a-712b-4ebb-803c-744a0fe69be4",
-              slug: "beepy-dev",
+              slug: process.env.POLAR_PRODUCT_SLUG as string,
             },
           ],
           successUrl: process.env.POLAR_SUCCESS_URL,
