@@ -1,19 +1,19 @@
-// import Handlebars from "handlebars";
+import Handlebars from "handlebars";
 import { NonRetriableError } from "inngest";
 import ky, { type Options as KyOptions } from "ky";
 import type { NodeExecutor } from "@/features/executions/types";
 
-// Handlebars.registerHelper("json", (context) => {
-//   const jsonString = JSON.stringify(context, null, 2);
-//   const safeString = new Handlebars.SafeString(jsonString);
+Handlebars.registerHelper("json", (context) => {
+  const jsonString = JSON.stringify(context, null, 2);
+  const safeString = new Handlebars.SafeString(jsonString);
 
-//   return safeString;
-// });
+  return safeString;
+});
 
 type HttpRequestData = {
-  variableName?: string;
-  endpoint?: string;
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  variableName: string;
+  endpoint: string;
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: string;
 };
 
@@ -41,21 +41,21 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
         throw new NonRetriableError("HTTP Request node: Method not configured");
       }
 
-      // const endpoint = Handlebars.compile(data.endpoint)(context);
+      const endpoint = Handlebars.compile(data.endpoint)(context);
       const method = data.method;
 
       const options: KyOptions = { method };
 
       if (["POST", "PUT", "PATCH"].includes(method)) {
-        // const resolved = Handlebars.compile(data.body || "{}")(context);
-        // JSON.parse(resolved);
-        options.body = data.body;
+        const resolved = Handlebars.compile(data.body || "{}")(context);
+        JSON.parse(resolved);
+        options.body = resolved;
         options.headers = {
           "Content-Type": "application/json",
         };
       }
 
-      const response = await ky(data.endpoint, options);
+      const response = await ky(endpoint, options);
       const contentType = response.headers.get("content-type");
       const responseData = contentType?.includes("application/json")
         ? await response.json()

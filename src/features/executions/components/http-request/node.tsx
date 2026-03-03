@@ -17,6 +17,7 @@ type HttpRequestNodeType = Node<HttpRequestNodeData>;
 
 export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { setNodes } = useReactFlow();
 
   // const nodeStatus = useNodeStatus({
   //   nodeId: props.id,
@@ -26,8 +27,6 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   // });
 
   const nodeStatus = "initial";
-
-  const { setNodes } = useReactFlow();
 
   const handleOpenSettings = () => setDialogOpen(true);
 
