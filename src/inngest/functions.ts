@@ -2,13 +2,19 @@ import { NonRetriableError } from "inngest";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
 import type { NodeType } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/db";
+import { httpRequestChannel } from "./channels/http-request";
+import { manualTriggerChannel } from "./channels/manual-trigger";
 import { inngest } from "./client";
 import { topologicalSort } from "./utils";
 
 export const executeWorkflow = inngest.createFunction(
   { id: "execute-workflow" },
-  { event: "workflows/execute.workflow" },
-  async ({ event, step }) => {
+  {
+    event: "workflows/execute.workflow",
+    channels: [httpRequestChannel(), manualTriggerChannel()],
+  },
+
+  async ({ event, step, publish }) => {
     const workflowId = event.data.workflowId;
 
     if (!workflowId) {
@@ -23,8 +29,6 @@ export const executeWorkflow = inngest.createFunction(
           connections: true,
         },
       });
-
-      console.log(workflow.nodes);
 
       return topologicalSort(workflow.nodes, workflow.connections);
     });
@@ -41,7 +45,7 @@ export const executeWorkflow = inngest.createFunction(
         userId: "null",
         context,
         step,
-        // publish,
+        publish,
       });
     }
 
