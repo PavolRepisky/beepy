@@ -5,3 +5,5 @@ procs:
     cmd: ["pnpm.cmd", "run", "dev"]
   inngest:
     cmd: ["pnpm.cmd", "dlx", "inngest-cli", "dev"]
+  ngrok:
+    cmd: ["pnpm.cmd", "run", "ngrok:dev"]
